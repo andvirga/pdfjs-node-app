@@ -1,0 +1,22 @@
+{
+  "name": "pdfjs-node-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node --loader ts-node/esm --watch-path=./src src/index.ts",
+    "start": "ts-node src/index.ts"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "pdfjs-dist": "^4.6.82"
+  }
+}
