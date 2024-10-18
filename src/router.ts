@@ -1,9 +1,9 @@
 import express from "express";
 
-import pdfRouter from "./pdf.ts";
+import { ingestionRouter } from "./ingestion.ts";
 
 const router = express.Router();
 
-router.use("/pdf", pdfRouter);
+router.use("/pdf", ingestionRouter);
 
 export default router;

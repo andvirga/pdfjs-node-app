@@ -1,7 +1,6 @@
 import express from "express";
 import type { Request, Response } from "express";
 import path from "path";
-import fs from "fs";
 import {
   getDocument,
   //   GlobalWorkerOptions,
@@ -12,25 +11,20 @@ const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-const readPDF = async (req: Request, res: Response) => {
+export const readPDF = async (req: Request, res: Response) => {
   try {
-    // Path to the PDF file
-    const fileName = req.body.file;
-    const pdfPath = path.join(__dirname, fileName || "");
+    const file = req.file;
 
     // Check if the PDF file exists
-    if (!fs.existsSync(pdfPath)) {
-      return res.status(404).json({ error: "PDF file not found" });
+    if (!file) {
+      return res.status(400).send('No file with the name "file" was uploaded.');
     }
-
-    // Read the PDF file into a Uint8Array
-    const data = new Uint8Array(fs.readFileSync(pdfPath));
 
     // // Disable worker warnings (since we're in Node.js)
     // GlobalWorkerOptions.workerSrc = "";
 
     // Load the PDF document
-    const loadingTask = getDocument({ data });
+    const loadingTask = getDocument(file.path);
     const pdfDocument = await loadingTask.promise;
     const numPages = pdfDocument.numPages;
     let fullText = [];
@@ -56,18 +50,13 @@ const readPDF = async (req: Request, res: Response) => {
         pageNum: pageNum,
         text: formatedText,
       });
-
-      // // Combine the strings into a single text
-      // const pageText = formatedText.join(" ");
-
-      // fullText += pageText + "\n";
     }
 
     // Return the extracted text as JSON
     return res.json(fullText);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error reading PDF:", error);
-    return res.status(500).json({ error: "Error reading PDF" });
+    return res.status(500).json({ error: error?.message });
   }
 };
 

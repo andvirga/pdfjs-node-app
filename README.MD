@@ -37,8 +37,7 @@ yarn dev
 
 ```bash
 curl --location 'localhost:8848/pdf' \
---header 'Content-Type: application/json' \
---data '{
-    "file": "samples/file.pdf"
-}'
+--form 'file=@"<FILE_PATH>"'
 ```
+
+(\*) Replace `<FILE_PATH>` with the full path to the PDF file you want to read on your computer.
